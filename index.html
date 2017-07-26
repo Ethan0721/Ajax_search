@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AJAX Search</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+	<h1>Ajax Movie and Actor Search</h1>
+	Title: &nbsp; &nbsp;
+	<input type='text' id='title' name='title' onkeyup="getMovies()">
+	&nbsp; &nbsp; &nbsp; Actor: &nbsp; &nbsp;
+	<input type='text' id='name' name='name' onkeyup="getMovies()">
+	&nbsp; &nbsp;(lastname, firstname)
+	<br>
+	<div id="divToChange"></div>
+	<script>
+		function getMovies() {
+			var nameEl = document.getElementById("name");
+			var name = nameEl.value;
+			var titleEl = document.getElementById("title");
+			var title = titleEl.value;
+			var temp = '';
+			var temp2 = '';
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					var array = JSON.parse(xhttp.responseText);
+					var str = ' ';
+					for (i = 0; i < array.length; i++) {
+						str = str + array[i];
+					}
+					if (array.length != 0) {
+						temp = "<table><tr><th>Movie Name</th><th>Actor Name</th><th>Movie Year</th>";
+						temp2 = "</table>";
+						str = temp + str + temp2;
+					}else 
+						str = "<br> &nbsp;&nbsp;No results";
+					
+					document.getElementById("divToChange").innerHTML = str;
+				}
+			}
+			 /* xhttp.open("GET",
+					"controller.php?name=" + name + "&title=" + title, true);  */
+		 xhttp.open("GET",
+					"controller.php?title=" + title + "&name=" + name, true);	
+			xhttp.send();
+		}
+	</script>
+
+</body>
+</html>
